@@ -1,0 +1,44 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true
+  },
+  "extends": ["prettier", "airbnb-base"],
+  "plugins": ["prettier"],
+  "parser": "@babel/eslint-parser",
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "parser": "@babel/eslint-parser",
+    "requireConfigFile": false,
+    "sourceType": "module"
+  },
+
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "semi": 1,
+    "curly": "off",
+    "eqeqeq": "off",
+    "camelcase": "off",
+    "quotes": [0, "double"],
+    "comma-dangle": "off",
+    "prefer-promise-reject-errors": "off",
+    "linebreak-style": ["error", "windows"],
+    "arrow-body-style": "off",
+    "implicit-arrow-linebreak": "off",
+    "import/no-extraneous-dependencies": "off",
+    "nonblock-statement-body-position": "off",
+    "consistent-return": "off",
+    "no-nested-ternary": "off",
+    "no-restricted-globals": "off",
+    "indent": "off",
+    "object-curly-newline": "off",
+    "no-shadow": "off"
+  }
+}
