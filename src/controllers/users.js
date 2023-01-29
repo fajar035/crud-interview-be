@@ -15,4 +15,16 @@ const getAllUsers = (req, res) => {
     });
 };
 
-module.exports = { getAllUsers };
+const addUser = (req, res) => {
+  const { body } = req;
+  usersModel
+    .addUser(body)
+    .then(({ status, result }) => {
+      return helpRes.success(res, status, result);
+    })
+    .catch(({ status, err }) => {
+      return helpRes.failed(res, status, err);
+    });
+};
+
+module.exports = { getAllUsers, addUser };

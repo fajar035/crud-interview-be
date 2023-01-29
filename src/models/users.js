@@ -1,3 +1,6 @@
+/* eslint-disable no-promise-executor-return */
+/* eslint-disable operator-linebreak */
+/* eslint-disable prefer-template */
 const mysql = require('mysql2');
 const db = require('../config/db');
 
@@ -66,4 +69,35 @@ const getAllUsers = (keyword, query) => {
   });
 };
 
-module.exports = { getAllUsers };
+const addUser = ({ email, fullname }) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'INSERT INTO users VALUES(null, ?, ?, ?)';
+    const d = new Date();
+    // const date = d.toISOString().split('T')[0];
+    const date =
+      [d.getFullYear(), d.getMonth() + 1, d.getDate()].join('-') +
+      ' ' +
+      [d.getHours(), d.getMinutes(), d.getSeconds()].join(':');
+
+    if (!email || !fullname)
+      return reject({
+        status: 400,
+        err: { message: 'Harap isi input email / fullname' },
+      });
+    const statement = [email, fullname, date];
+    db.query(sql, statement, (err, result) => {
+      if (err) return reject({ status: 500, err });
+      return resolve({
+        status: 201,
+        result: {
+          id: result.insertId,
+          email,
+          fullname,
+          date,
+        },
+      });
+    });
+  });
+};
+
+module.exports = { getAllUsers, addUser };
