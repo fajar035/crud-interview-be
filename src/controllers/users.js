@@ -27,4 +27,29 @@ const addUser = (req, res) => {
     });
 };
 
-module.exports = { getAllUsers, addUser };
+const updateUser = (req, res) => {
+  const { bodyOld, body } = req;
+  const { id } = req.params;
+  usersModel
+    .updateUser(body, bodyOld, id)
+    .then(({ status, result }) => {
+      return helpRes.success(res, status, result);
+    })
+    .catch(({ status, err }) => {
+      return helpRes.failed(res, status, err);
+    });
+};
+
+const deleteUser = (req, res) => {
+  const { id } = req.params;
+  usersModel
+    .deleteUser(id)
+    .then(({ status, result }) => {
+      return helpRes.success(res, status, result);
+    })
+    .catch(({ status, err }) => {
+      return helpRes.failed(res, status, err);
+    });
+};
+
+module.exports = { getAllUsers, addUser, updateUser, deleteUser };

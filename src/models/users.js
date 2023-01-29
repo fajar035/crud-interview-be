@@ -100,4 +100,60 @@ const addUser = ({ email, fullname }) => {
   });
 };
 
-module.exports = { getAllUsers, addUser };
+const deleteUser = (id) => {
+  return new Promise((resolve, reject) => {
+    if (id === ':id')
+      return reject({
+        status: 400,
+        err: { message: 'Harap isi id url params' },
+      });
+    const sql = 'DELETE FROM users WHERE id = ?';
+    db.query(sql, [id], (err, result) => {
+      if (err) return reject({ status: 500, err });
+
+      if (result.affectedRows === 0)
+        return reject({
+          status: 404,
+          err: { message: `ID ${id} tidak ditemukan` },
+        });
+      return resolve({
+        status: 200,
+        result: {
+          message: `Berhasil menghapus id = ${id}`,
+        },
+      });
+    });
+  });
+};
+
+const updateUser = (body, bodyOld, id) => {
+  return new Promise((resolve, reject) => {
+    let { email, fullname } = body;
+    const { emailOld, fullnameOld } = bodyOld;
+    if (!email && !fullname)
+      return reject({ status: 400, err: { message: 'harap isi form input' } });
+
+    if (!email) {
+      email = emailOld;
+    }
+    if (!fullname) {
+      fullname = fullnameOld;
+    }
+
+    const statement = [email, fullname, id];
+    const sql = 'UPDATE users SET email = ?, fullname = ?WHERE id = ?';
+    db.query(sql, statement, (err) => {
+      if (err) return reject({ status: 500, err });
+      return resolve({
+        status: 201,
+        result: {
+          id,
+          email,
+          fullname,
+        },
+      });
+    });
+  });
+};
+
+module.exports = { getAllUsers, addUser, updateUser, deleteUser };
