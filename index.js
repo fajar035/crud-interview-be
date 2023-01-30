@@ -11,7 +11,7 @@ const logger = morgan(
   ':method : url :status :res[content-length] - :response-time ms'
 );
 const corsOptions = {
-  origin: [process.env.HOSTFRONTEND, process.env.HOSTDEPLOYFRONTEND],
+  origin: [process.env.HOSTFRONTEND, process.env.HOSTDEPLOYFRONTEND, '*'],
   allowedHeaders: ['content-type'],
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
 };
