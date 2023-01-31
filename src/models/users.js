@@ -85,16 +85,28 @@ const addUser = ({ email, fullname }) => {
         err: { message: 'Harap isi input email / fullname' },
       });
     const statement = [email, fullname, date];
-    db.query(sql, statement, (err, result) => {
+    db.query('SELECT * FROM users', (err, result) => {
       if (err) return reject({ status: 500, err });
-      return resolve({
-        status: 201,
-        result: {
-          id: result.insertId,
-          email,
-          fullname,
-          date,
-        },
+      result.forEach((item) => {
+        if (item.email === email)
+          return resolve({
+            status: 400,
+            result: {
+              message: 'Data Sudah ada',
+            },
+          });
+        db.query(sql, statement, (err, result) => {
+          if (err) return reject({ status: 500, err });
+          return resolve({
+            status: 201,
+            result: {
+              id: result.insertId,
+              email,
+              fullname,
+              date,
+            },
+          });
+        });
       });
     });
   });
@@ -116,11 +128,18 @@ const deleteUser = (id) => {
           status: 404,
           err: { message: `ID ${id} tidak ditemukan` },
         });
-      return resolve({
-        status: 200,
-        result: {
-          message: `Berhasil menghapus id = ${id}`,
-        },
+      db.query('SELECT * FROM users', (err, result) => {
+        if (err) return reject({ status: 500, err });
+        const res = result[0];
+        const { email } = res;
+        return resolve({
+          status: 200,
+          result: {
+            id,
+            email,
+            message: `Berhasil menghapus user`,
+          },
+        });
       });
     });
   });
