@@ -87,14 +87,19 @@ const addUser = ({ email, fullname }) => {
     const statement = [email, fullname, date];
     db.query('SELECT * FROM users', (err, result) => {
       if (err) return reject({ status: 500, err });
+      let checkEmail = false;
       result.forEach((item) => {
-        if (item.email === email)
+        if (item.email === email) {
+          checkEmail = true;
           return resolve({
             status: 400,
             result: {
               message: 'Data Sudah ada',
             },
           });
+        }
+      });
+      if (!checkEmail) {
         db.query(sql, statement, (err, result) => {
           if (err) return reject({ status: 500, err });
           return resolve({
@@ -107,7 +112,7 @@ const addUser = ({ email, fullname }) => {
             },
           });
         });
-      });
+      }
     });
   });
 };
