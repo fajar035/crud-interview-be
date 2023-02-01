@@ -44,12 +44,12 @@ const getAllUsers = (keyword, query) => {
           ? null
           : page == Math.ceil(count / limit)
           ? null
-          : `/api/users?by=name&sort=asc&page=${page + 1}&limit=${limit}`,
+          : `/api/users?by=asc&sort=fullname&page=${page + 1}&limit=${limit}`,
         prev: isNaN(limit)
           ? null
           : page == 1 || page == 0
           ? null
-          : `/api/users?by=name&sort=asc&page=${page - 1}&limit=${limit}`,
+          : `/api/users?by=asc&sort=fullname&page=${page - 1}&limit=${limit}`,
         totalPage,
         count,
       };
