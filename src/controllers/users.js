@@ -15,6 +15,18 @@ const getAllUsers = (req, res) => {
     });
 };
 
+const getUserById = (req, res) => {
+  const { id } = req.params;
+  usersModel
+    .getUserById(id)
+    .then(({ status, result }) => {
+      return helpRes.success(res, status, result);
+    })
+    .catch(({ status, err }) => {
+      return helpRes.failed(res, status, err);
+    });
+};
+
 const addUser = (req, res) => {
   const { body } = req;
   usersModel
@@ -52,4 +64,4 @@ const deleteUser = (req, res) => {
     });
 };
 
-module.exports = { getAllUsers, addUser, updateUser, deleteUser };
+module.exports = { getAllUsers, getUserById, addUser, updateUser, deleteUser };

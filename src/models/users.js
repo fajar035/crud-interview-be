@@ -69,6 +69,29 @@ const getAllUsers = (keyword, query) => {
   });
 };
 
+const getUserById = (id) => {
+  return new Promise((resolve, reject) => {
+    if (id === ':id')
+      return reject({
+        status: 400,
+        err: { message: 'Harap isi id url params' },
+      });
+    const sql = `SELECT * FROM users WHERE id = ?`;
+    db.query(sql, [id], (err, result) => {
+      if (err) return reject({ status: 500, err });
+      if (result.affectedRows === 0)
+        return reject({
+          status: 404,
+          err: { message: `ID ${id} tidak ditemukan` },
+        });
+      return resolve({
+        status: 200,
+        result,
+      });
+    });
+  });
+};
+
 const addUser = ({ email, fullname }) => {
   return new Promise((resolve, reject) => {
     const sql = 'INSERT INTO users VALUES(null, ?, ?, ?)';
@@ -180,4 +203,4 @@ const updateUser = (body, bodyOld, id) => {
   });
 };
 
-module.exports = { getAllUsers, addUser, updateUser, deleteUser };
+module.exports = { getAllUsers, getUserById, addUser, updateUser, deleteUser };
